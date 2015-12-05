@@ -1,9 +1,12 @@
 package com.example.aaron.todolist;
 
 
-import android.graphics.Typeface;
+import android.app.Notification;
+import android.app.NotificationManager;
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -22,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     MainActivityFragment fragment = new MainActivityFragment();
     ArrayAdapter adapter;
     int listPosition;
-
+    CustomAdapter mainCustomAdapter = new CustomAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +34,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Typeface font = Typeface.createFromAsset(getAssets(), "unique.ttf");
-        EditText titleEditText = (EditText) findViewById(R.id.title_editText);
-        titleEditText.setTypeface(font);
         listview = (ListView) findViewById(R.id.list_view);
 
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, fragment.list);
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mainCustomAdapter.list);
 
         //On click listener for when the user selects the list item they want to update
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String value = (String) listview.getItemAtPosition(position);
                 taskEditText.setText(value);
-                listPosition = fragment.list.indexOf(value);
+                listPosition = mainCustomAdapter.list.indexOf(value);
                 Log.d("flow", "list position is: " + listPosition);
             }
         });
@@ -55,8 +55,9 @@ public class MainActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("flow", "item was long clicked");
                 String onLongClickValue = (String) listview.getItemAtPosition(position);
-                listPosition = fragment.list.indexOf(onLongClickValue);
-                fragment.deleteToDoItem(listPosition);
+                listPosition = mainCustomAdapter.list.indexOf(onLongClickValue);
+                mainCustomAdapter.deleteToDoItem(listPosition);
+                deleteTaskNotification();
                 adapter.notifyDataSetChanged();
                 return false;
             }
@@ -73,15 +74,16 @@ public class MainActivity extends AppCompatActivity {
                 userTask = taskEditText.getText().toString();
                 taskEditText.getText().clear();
                 Log.d("flow", "String is passed:" + userTask);
-                fragment.addToDoItem(userTask);
+                mainCustomAdapter.addToDoItem(userTask);
                 listview.setAdapter(adapter);
+                addTaskNotification();
                 return true;
             case R.id.action_updateTask:
                 Log.d("flow", "action_updateItem clicked");
                 userTask = taskEditText.getText().toString();
                 taskEditText.getText().clear();
                 Log.d("flow", "String is passed:" + userTask);
-                fragment.editToDoItem(userTask, listPosition);
+                mainCustomAdapter.editToDoItem(userTask, listPosition);
                 adapter.notifyDataSetChanged();
                 return true;
             default:
@@ -93,5 +95,29 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    public void addTaskNotification(){
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+        mBuilder.setSmallIcon(R.drawable.ic_add_white_24dp);
+        mBuilder.setContentTitle("Add Notification");
+        mBuilder.setContentText("You added " + userTask + " to the list");
+
+        Notification notification = mBuilder.build();
+        NotificationManager manager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+        manager.notify(1, notification);
+        mBuilder.setAutoCancel(true);
+    }
+
+    public void deleteTaskNotification(){
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+        mBuilder.setSmallIcon(R.drawable.ic_delete_white_24dp);
+        mBuilder.setContentTitle("Delete Notification");
+        mBuilder.setContentText("You deleted " + userTask + " from the list");
+
+        Notification notification = mBuilder.build();
+        NotificationManager manager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+        manager.notify(2, notification);
+        mBuilder.setAutoCancel(true);
     }
 }

@@ -10,22 +10,11 @@
     tools:showIn="@layout/activity_main">
 
     <EditText
-        android:id="@+id/title_editText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/todo_title"
-        android:inputType="text"
-        android:layout_marginTop="20dp"
-        android:background="@android:color/transparent"
-        android:textSize="20sp"/>
-
-    <EditText
         android:id="@+id/add_task"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/title_editText"
         android:hint="@string/todo_item"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:background="@android:color/transparent"/>
 
     <ListView
@@ -33,13 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/add_task"
-        android:listSelector="@drawable/list_selector"
-        android:src="@drawable/ic_alarm_black_24dp">
+        android:background="@drawable/list_selector">
     </ListView>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"/>
 
 </RelativeLayout>

@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/list_taskView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Text here"
-        android:textStyle="bold"
-        android:layout_marginTop="50dp"
-        android:layout_centerHorizontal="true"
-        />
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@drawable/list_selector"
+    android:padding="5dp">
 
     <ImageView
-        android:id="@+id/eidt_image"
+        android:id="@+id/rubiks_cube"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_alarm_black_24dp"
-        android:layout_toRightOf="@id/list_taskView"/>
+        android:layout_height="wrap_content" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 </RelativeLayout>
