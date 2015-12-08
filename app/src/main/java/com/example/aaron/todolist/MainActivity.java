@@ -1,6 +1,7 @@
 package com.example.aaron.todolist;
 
 
+import android.app.DialogFragment;
 import android.app.Notification;
 import android.app.NotificationManager;
 
@@ -22,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
     public EditText taskEditText;
     public String userTask;
     public ListView listview;
-    MainActivityFragment fragment = new MainActivityFragment();
+//    TimePickerFragment timePickerFragment = new TimePickerFragment();
+//    MainActivityFragment fragment = new MainActivityFragment();
     ArrayAdapter adapter;
     int listPosition;
     CustomAdapter mainCustomAdapter = new CustomAdapter();
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String value = (String) listview.getItemAtPosition(position);
+                showDatePickerDialog();
                 taskEditText.setText(value);
                 listPosition = mainCustomAdapter.list.indexOf(value);
                 Log.d("flow", "list position is: " + listPosition);
@@ -97,6 +100,17 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public void showTimePickerDialog(){
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.show(getFragmentManager(), "timePicker");
+    }
+
+    public void showDatePickerDialog(){
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getFragmentManager(), "datePicker");
+    }
+
+    //Add and Delete task notification
     public void addTaskNotification(){
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setSmallIcon(R.drawable.ic_add_white_24dp);
@@ -106,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
         Notification notification = mBuilder.build();
         NotificationManager manager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
         manager.notify(1, notification);
-        mBuilder.setAutoCancel(true);
     }
 
     public void deleteTaskNotification(){
@@ -118,6 +131,5 @@ public class MainActivity extends AppCompatActivity {
         Notification notification = mBuilder.build();
         NotificationManager manager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
         manager.notify(2, notification);
-        mBuilder.setAutoCancel(true);
     }
 }
