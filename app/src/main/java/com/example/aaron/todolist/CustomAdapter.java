@@ -47,8 +47,9 @@ public class CustomAdapter extends BaseAdapter{
         String listItem = (String) getItem(position);
         View custom = inflater.inflate(R.layout.custom, parent, false);
         TextView textView = (TextView) custom.findViewById(R.id.textView);
+        ImageView imageView = (ImageView) custom.findViewById(R.id.rubiks_cube);
         textView.setText(listItem);
-
+        imageView.setImageResource(R.drawable.rubik_cube);
         return custom;
     }
     //method to add items to the list

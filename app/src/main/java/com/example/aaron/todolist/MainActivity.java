@@ -1,10 +1,12 @@
 package com.example.aaron.todolist;
 
 
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.Notification;
 import android.app.NotificationManager;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
@@ -17,18 +19,18 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TimePicker;
 
 public class MainActivity extends AppCompatActivity {
 
     public EditText taskEditText;
     public String userTask;
     public ListView listview;
-//    TimePickerFragment timePickerFragment = new TimePickerFragment();
-//    MainActivityFragment fragment = new MainActivityFragment();
-    ArrayAdapter adapter;
     int listPosition;
-    CustomAdapter mainCustomAdapter = new CustomAdapter();
-
+    CustomAdapter customAdapter;
+    public TimePicker timePicker;
+    int hourOfDay, min;
+    TimePickerFragment timePickerFragment = new TimePickerFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,19 +38,36 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        timePicker = (TimePicker) findViewById(R.id.timePicker);
         listview = (ListView) findViewById(R.id.list_view);
+        customAdapter = new CustomAdapter(this);
 
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mainCustomAdapter.list);
+        //adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, mainCustomAdapter.list);
 
         //On click listener for when the user selects the list item they want to update
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String value = (String) listview.getItemAtPosition(position);
-                showDatePickerDialog();
-                taskEditText.setText(value);
-                listPosition = mainCustomAdapter.list.indexOf(value);
-                Log.d("flow", "list position is: " + listPosition);
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(R.string.dialog_message_title)
+                        .setMessage(R.string.dialog_content_message);
+                builder.setNegativeButton("Update", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String value = (String) listview.getItemAtPosition(position);
+                        taskEditText.setText(value);
+                        listPosition = customAdapter.list.indexOf(value);
+                    }
+                });
+                builder.setPositiveButton("Create reminder", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //showDatePickerDialog();
+                        showTimePickerDialog();
+                    }
+                });
+                builder.create();
+                builder.show();
             }
         });
 
@@ -58,10 +77,10 @@ public class MainActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("flow", "item was long clicked");
                 String onLongClickValue = (String) listview.getItemAtPosition(position);
-                listPosition = mainCustomAdapter.list.indexOf(onLongClickValue);
-                mainCustomAdapter.deleteToDoItem(listPosition);
+                listPosition = customAdapter.list.indexOf(onLongClickValue);
+                customAdapter.deleteToDoItem(listPosition);
                 deleteTaskNotification();
-                adapter.notifyDataSetChanged();
+                customAdapter.notifyDataSetChanged();
                 return false;
             }
         });
@@ -77,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
                 userTask = taskEditText.getText().toString();
                 taskEditText.getText().clear();
                 Log.d("flow", "String is passed:" + userTask);
-                mainCustomAdapter.addToDoItem(userTask);
-                listview.setAdapter(adapter);
+                customAdapter.addToDoItem(userTask);
+                listview.setAdapter(customAdapter);
                 addTaskNotification();
                 return true;
             case R.id.action_updateTask:
@@ -86,8 +105,8 @@ public class MainActivity extends AppCompatActivity {
                 userTask = taskEditText.getText().toString();
                 taskEditText.getText().clear();
                 Log.d("flow", "String is passed:" + userTask);
-                mainCustomAdapter.editToDoItem(userTask, listPosition);
-                adapter.notifyDataSetChanged();
+                customAdapter.editToDoItem(userTask, listPosition);
+                customAdapter.notifyDataSetChanged();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
