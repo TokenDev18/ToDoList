@@ -6,6 +6,6 @@
     <string name="additem_sign">Plus sign to add items to the list</string>
     <string name="updateitem_sign">Update items in the list</string>
     <string name="dialog_message_title">What would you like to do</string>
-    <string name="dialog_content_message">1. Click update if you want to update and item in the list \n
+    <string name="dialog_content_message">1. Click update if you want to update and item in the list \n\n
     2. Click reminder to set a reminder for the item clicked in the list</string>
 </resources>

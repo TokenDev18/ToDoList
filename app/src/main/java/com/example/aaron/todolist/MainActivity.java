@@ -122,12 +122,15 @@ public class MainActivity extends AppCompatActivity {
     public void showTimePickerDialog(){
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getFragmentManager(), "timePicker");
+
     }
 
     public void showDatePickerDialog(){
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getFragmentManager(), "datePicker");
     }
+
+
 
     //Add and Delete task notification
     public void addTaskNotification(){

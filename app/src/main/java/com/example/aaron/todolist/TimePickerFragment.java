@@ -16,6 +16,7 @@ import java.util.Calendar;
  */
 public class TimePickerFragment extends DialogFragment implements android.app.TimePickerDialog.OnTimeSetListener {
     int userHourOfDay, userMinute;
+    String userTime = " ";
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -33,7 +34,8 @@ public class TimePickerFragment extends DialogFragment implements android.app.Ti
         Log.d("flow", "the hour and minute is: " + hourOfDay + " " + minute);
     }
 
-    public void getUserTime(){
-
-    }
+//    public String getUserTime(){
+//
+//        return;
+//    }
 }
