@@ -7,8 +7,9 @@
     android:padding="5dp">
 
     <ImageView
+        android:contentDescription="@string/rubik_cube"
         android:id="@+id/rubiks_cube"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="50dp"
         android:src="@drawable/rubik_cube"
         android:layout_alignRight="@+id/textView"/>
@@ -17,5 +18,10 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:typeface="serif"
+        android:textStyle="bold"
+        android:textColor="@color/textColorPrimary"/>
 </RelativeLayout>

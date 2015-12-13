@@ -16,7 +16,10 @@ import java.util.Calendar;
  */
 public class TimePickerFragment extends DialogFragment implements android.app.TimePickerDialog.OnTimeSetListener {
     int userHourOfDay, userMinute;
-    String userTime = " ";
+    long userTime;
+    final static long MILLISEC_IN_HOUR = 3600000L;
+    final static long MILLISEC_IN_MIN = 60000L;
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -28,14 +31,13 @@ public class TimePickerFragment extends DialogFragment implements android.app.Ti
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        this.userHourOfDay = hourOfDay;
-        this.userMinute = minute;
         if(hourOfDay == 0) hourOfDay += 12;
+        ((MainActivity) getActivity()).setTime(hourOfDay, minute);
         Log.d("flow", "the hour and minute is: " + hourOfDay + " " + minute);
     }
 
-//    public String getUserTime(){
-//
-//        return;
-//    }
+  public long getUserTimeInMilliSec(){
+      userTime = (userHourOfDay * MILLISEC_IN_HOUR) + (userMinute * MILLISEC_IN_MIN);
+        return userTime ;
+   }
 }
