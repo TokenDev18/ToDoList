@@ -14,7 +14,6 @@ import android.util.Log;
 public class AlarmIntentService extends IntentService {
 
     private static final int NOTIFY_ID = 1;
-    private boolean notificationBoolean = false;
 
     public AlarmIntentService(){
         super("AlarmIntentService");
@@ -23,17 +22,16 @@ public class AlarmIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d("flow", "HANDLER STARTED FOR INTENT");
-        TimePickerFragment pickerFragment = new TimePickerFragment();
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         long when = System.currentTimeMillis();
             Notification notification = new Notification(R.mipmap.ic_launcher, "Task Reminder", when);
             notification.defaults |= Notification.DEFAULT_SOUND;
             notification.flags |= notification.FLAG_AUTO_CANCEL;
 
-            Intent notificationIntent = new Intent(this, MainActivity.class);
+            Intent notificationIntent = new Intent(this, TaskActivity.class);
             PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
             notification.setLatestEventInfo(getApplicationContext(), "Check Me Out", "Yo, open the app and check out your task", contentIntent);
-
             notificationManager.notify(NOTIFY_ID, notification);
+
     }
 }

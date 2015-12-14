@@ -9,4 +9,6 @@
     <string name="dialog_content_message">1. Click "update task" if you want to update the selected task in the list \n\n
     2. Click "Create Reminder" to set a reminder for the selected task</string>
     <string name="rubik_cube">Cool Cube</string>
+    <string name="title_activity_task">TaskActivity</string>
+    <string name="addTask_string">Add Task To List</string>
 </resources>

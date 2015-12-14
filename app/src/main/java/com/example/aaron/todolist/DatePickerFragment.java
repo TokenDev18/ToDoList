@@ -25,6 +25,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        ((MainActivity) getActivity()).setDate(dayOfMonth, monthOfYear);
+        ((TaskActivity) getActivity()).setDate(dayOfMonth, monthOfYear);
     }
 }

@@ -9,21 +9,17 @@
     tools:context="com.example.aaron.todolist.MainActivityFragment"
     tools:showIn="@layout/activity_main">
 
-    <EditText
-        android:id="@+id/add_task"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/todo_item"
-        android:layout_marginTop="5dp"
-        android:background="@android:color/transparent"
-        android:typeface="serif"/>
-
-    <ListView
-        android:id="@+id/list_view"
+    <Button
+        android:id="@+id/addTaskToList_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/add_task"
-        android:textAlignment="center">
-    </ListView>
+        android:text="@string/addTask_string"
+        android:background="@color/colorPrimaryDark"
+        android:textStyle="bold"
+        android:textColor="@color/buttonTextColor"
+        android:typeface="serif"
+        android:layout_marginTop="174dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
