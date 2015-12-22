@@ -11,20 +11,29 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
+
 /**
  * Created by aaron on 12/1/15.
  */
 public class CustomAdapter extends BaseAdapter{
 
-    private LayoutInflater inflater;
+    Context context;
     public ArrayList<String> list = new ArrayList<>();
+
 
     public CustomAdapter(){
 
     }
 
     public CustomAdapter(Context context){
-        inflater = LayoutInflater.from(context);
+        this.context = context;
+
+    }
+
+    private static class ViewHolder {
+        TextView textView;
+        ImageView imageView;
     }
 
     @Override
@@ -44,14 +53,27 @@ public class CustomAdapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        String listItem = (String) getItem(position);
-        View custom = inflater.inflate(R.layout.custom, parent, false);
-        TextView textView = (TextView) custom.findViewById(R.id.textView);
-        ImageView imageView = (ImageView) custom.findViewById(R.id.rubiks_cube);
-        textView.setText(listItem);
-        imageView.setImageResource(R.drawable.rubik_cube);
-        return custom;
+
+        final ViewHolder viewHolder;
+
+        if(convertView == null){
+            LayoutInflater inflater = LayoutInflater.from(context);
+            convertView = inflater.inflate(R.layout.custom, parent, false);
+
+            viewHolder = new ViewHolder();
+
+            viewHolder.textView = (TextView) convertView.findViewById(R.id.textView);
+            viewHolder.imageView = (ImageView) convertView.findViewById(R.id.rubiks_cube);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        viewHolder.textView.setText(list.get(position));
+
+        return convertView;
     }
+
     //method to add items to the list
     public void addToDoItem(String userTask){
         Log.d("flow", "add method was called");

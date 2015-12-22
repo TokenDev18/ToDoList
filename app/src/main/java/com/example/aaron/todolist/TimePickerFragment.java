@@ -28,6 +28,6 @@ public class TimePickerFragment extends DialogFragment implements android.app.Ti
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Log.d("flow", "the hour and minute is: " + hourOfDay + " " + minute);
         if(hourOfDay == 0) hourOfDay += 12;
-        ((TaskActivity) getActivity()).setTime(hourOfDay, minute);
+        ((MainActivity) getActivity()).setTime(hourOfDay, minute);
     }
 }

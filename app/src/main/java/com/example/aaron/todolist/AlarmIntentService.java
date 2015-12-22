@@ -28,7 +28,7 @@ public class AlarmIntentService extends IntentService {
             notification.defaults |= Notification.DEFAULT_SOUND;
             notification.flags |= notification.FLAG_AUTO_CANCEL;
 
-            Intent notificationIntent = new Intent(this, TaskActivity.class);
+            Intent notificationIntent = new Intent(this, MainActivity.class);
             PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
             notification.setLatestEventInfo(getApplicationContext(), "Check Me Out", "Yo, open the app and check out your task", contentIntent);
             notificationManager.notify(NOTIFY_ID, notification);
