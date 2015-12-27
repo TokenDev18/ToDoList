@@ -3,7 +3,9 @@ package com.example.aaron.todolist;
 
 
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,8 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -21,30 +26,26 @@ import io.realm.RealmResults;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements AdapterView.OnClickListener  {
+public class MainActivityFragment extends Fragment   {
 
-    private CustomAdapter customAdapter;
-    private ListView listview;
+
     private EditText taskEditText;
-    private String userTask;
-    private int listPosition;
-    DatePickerFragment datePicker;
-    Realm realm;
-    private RealmResults<Task> tasks;
-
-
+    private Button button;
+    ReceivingUserTask rTask;
+    RelativeLayout rLayout;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        listview = (ListView) view.findViewById(R.id.list_view);
-        listview.setOnItemClickListener(onItemClickListener);
-        listview.setOnItemLongClickListener(onItemLongClickListener);
         taskEditText = (EditText) view.findViewById(R.id.add_task);
-        customAdapter = new CustomAdapter(getActivity());
-        realm = Realm.getInstance(getActivity());
+        button = (Button) view.findViewById(R.id.add_button);
+        rLayout = (RelativeLayout) view.findViewById(R.id.taskfrag_container);
+
+        taskEditText.setVisibility(View.INVISIBLE);
+        button.setVisibility(View.INVISIBLE);
+
+        button.setOnClickListener(onClickListener);
+
         return view;
     }
 
@@ -55,65 +56,46 @@ public class MainActivityFragment extends Fragment implements AdapterView.OnClic
 
     }
 
-    private AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            String value = (String) listview.getItemAtPosition(position);
-            taskEditText.setText(value);
-            taskEditText.setSelection(taskEditText.length());
-            listPosition = customAdapter.list.indexOf(value);
-        }
-    };
-
-    private AdapterView.OnItemLongClickListener onItemLongClickListener = new AdapterView.OnItemLongClickListener() {
-        @Override
-        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-            Log.d("flow", "item was long clicked");
-            showDatePickerDialog();
-            return false;
-        }
-    };
-
     @Override
-    public void onClick(View v) {
-
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            rTask = (ReceivingUserTask) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Must implement ReceivingUserTask");
+        }
     }
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Log.d("flow", "add task button was clicked");
+            String userTask = taskEditText.getText().toString();
+            Log.d("flow", "this string was passed " + userTask);
+            rTask.receiveTask(userTask);
+            taskEditText.getText().clear();
 
-    public void showDatePickerDialog() {
-        datePicker = new DatePickerFragment();
-        datePicker.show(getFragmentManager(), "datePicker");
-    }
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            TaskFragment taskFragment = new TaskFragment();
+            transaction.replace(R.id.taskfrag_container, taskFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_addTask:
                 Log.d("flow", "action_addTask clicked");
-                userTask = taskEditText.getText().toString();
-                taskEditText.getText().clear();
-                Log.d("flow", "String is passed:" + userTask);
-                customAdapter.addToDoItem(userTask);
-                realm.beginTransaction();
-                Task task = realm.createObject(Task.class);
-                task.setNote(userTask);
-                realm.commitTransaction();
-                listview.setAdapter(customAdapter);
+                taskEditText.setVisibility(View.VISIBLE);
+                button.setVisibility(View.VISIBLE);
                 return true;
-            case R.id.action_updateTask:
-                Log.d("flow", "action_updateItem clicked");
-                userTask = taskEditText.getText().toString();
-                taskEditText.getText().clear();
-                Log.d("flow", "String is passed:" + userTask);
-                customAdapter.editToDoItem(userTask, listPosition);
-                customAdapter.notifyDataSetChanged();
-                return true;
-            case R.id.action_deleteTask:
-                Log.d("flow", "action_deleteItem clicked");
-                customAdapter.deleteToDoItem(listPosition);
-                taskEditText.getText().clear();
-                customAdapter.notifyDataSetChanged();
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public interface ReceivingUserTask {
+        public void receiveTask(String task);
     }
 }

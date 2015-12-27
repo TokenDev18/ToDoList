@@ -73,7 +73,6 @@ public class CustomAdapter extends BaseAdapter{
 
         return convertView;
     }
-
     //method to add items to the list
     public void addToDoItem(String userTask){
         Log.d("flow", "add method was called");

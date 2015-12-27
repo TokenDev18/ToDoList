@@ -16,17 +16,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity implements MainActivityFragment.ReceivingUserTask {
 
     private int userMonthOfYear;
     private int userDayOfMonth;
     private int userHourOfDay;
     private int userMinute;
     private DialogFragment timePicker;
+    TaskFragment taskFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,12 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+//        FragmentManager fragmentManager = getFragmentManager();
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        taskFragment = new TaskFragment();
+//        transaction.add(R.id.main_id, taskFragment);
+//        transaction.commit();
 
     }
 
@@ -78,6 +87,15 @@ public class MainActivity extends AppCompatActivity  {
             alarmManager.setExact(AlarmManager.RTC, when, pendingIntent);
         } else {
             alarmManager.set(AlarmManager.RTC, when, pendingIntent);
+        }
+    }
+
+    @Override
+    public void receiveTask(String task) {
+        Log.d("flow", task);
+        taskFragment = (TaskFragment) getFragmentManager().findFragmentById(R.id.task_frag);
+        if(taskFragment != null) {
+            taskFragment.addUserTask(task);
         }
     }
 }
